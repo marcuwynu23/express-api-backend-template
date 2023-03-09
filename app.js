@@ -7,6 +7,7 @@ var express = require('express');
 var session = require('express-session')
 var path = require('path');
 var logger = require('morgan');
+var cors = require('cors')
 
 
 var app = express();
@@ -17,7 +18,10 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false }
 }))
-
+app.use(cors({
+  origin: "http://localhost:9000",
+  credentials: true,
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
