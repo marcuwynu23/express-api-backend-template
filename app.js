@@ -9,6 +9,7 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require('cors')
 
+require('dotenv0').config()
 
 var app = express();
 
@@ -16,10 +17,10 @@ app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { secure: true, httpOnly: true, maxAge: 60000 }
 }))
 app.use(cors({
-  origin: "http://localhost:9000",
+  origin: process.env.CORS_ORIGIN,
   credentials: true,
 }))
 app.use(logger('dev'));

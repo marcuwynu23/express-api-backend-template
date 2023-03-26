@@ -1,3 +1,4 @@
+
 /*
  *   Copyright (c) 2023 
  *   All rights reserved.
@@ -10,7 +11,7 @@
 var app = require('../app');
 var debug = require('debug')('try-express:server');
 var http = require('http');
-
+require('dotenv').config()
 /**
  * Get port from environment and store in Express.
  */
