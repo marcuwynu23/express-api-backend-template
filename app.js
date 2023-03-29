@@ -9,7 +9,7 @@ var path = require('path');
 var logger = require('morgan');
 var cors = require('cors')
 
-require('dotenv0').config()
+require('dotenv').config()
 
 var app = express();
 
