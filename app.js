@@ -35,36 +35,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use((req, res, next) => {
-  const originalSend = res.send; // Save a reference to the original send method
-
-  // Override the send method to intercept the response body and generate a hash code
+  const originalSend = res.send;
   res.send = function (body) {
-    const userAgent = req.headers['user-agent']; // Get the user agent string from the request headers
-    let responseStatusCode = res.statusCode; // Get the response status code
-    let responseBodyHashCode = null; // Initialize the hash code variable to null
-
+    const userAgent = req.headers['user-agent'];
+    let responseStatusCode = res.statusCode;
+    let responseBodyHashCode = null;
     if (typeof body === 'string') {
-      // If the response body is a string, generate a hash code using the crypto module
       responseBodyHashCode = crypto.createHash('md5').update(body).digest('hex');
     }
 
-    // Check if the user agent string is a known crawler or mobile device
     const isCrawler = /bot|crawl|slurp|spider/i.test(userAgent);
     const isMobile = /mobile/i.test(userAgent);
 
     if (isCrawler || isMobile) {
-      // If the user agent string is a known crawler or mobile device, log the request and response details
       console.log(`User agent: ${userAgent}`);
       console.log(`Request URL: ${req.url}`);
       console.log(`Response status code: ${responseStatusCode}`);
       console.log(`Response body hash code: ${responseBodyHashCode}`);
     }
 
-    // Call the original send method with the response body
     originalSend.apply(res, arguments);
   };
 
-  // Call the next middleware or route handler
   next();
 });
 
@@ -75,14 +67,11 @@ app.use('/api', require('./routes/api'))
 
 
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
